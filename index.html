@@ -383,25 +383,6 @@ function renderSearch() {
   }).join('');
 }
 
-// Search filter
-let st;
-el('search-input').addEventListener('input', function() {
-  clearTimeout(st);
-  st = setTimeout(() => {
-    const f = this.value.toLowerCase().trim();
-    const cards = qAll('#search-results .card');
-    let n = 0;
-    cards.forEach(c => { const m = !f || c.dataset.s.includes(f); c.style.display = m ? '' : 'none'; if (m) n++; });
-    el('search-count').innerHTML = '<strong>' + n + '</strong> item' + (n === 1 ? '' : 's') + (f ? ' matching' : '');
-  }, 120);
-});
-
-// ─────────────────────────────────────────────────────────────────────────────
-// LIGHTBOX
-// ─────────────────────────────────────────────────────────────────────────────
-function openLightbox(url) { el('lb-img').src = url; el('lightbox').classList.add('open'); }
-function closeLightbox()   { el('lightbox').classList.remove('open'); }
-
 // ─────────────────────────────────────────────────────────────────────────────
 // HELPERS
 // ─────────────────────────────────────────────────────────────────────────────
@@ -423,9 +404,33 @@ function fmtDate(v) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// LIGHTBOX
+// ─────────────────────────────────────────────────────────────────────────────
+function openLightbox(url) { el('lb-img').src = url; el('lightbox').classList.add('open'); }
+function closeLightbox()   { el('lightbox').classList.remove('open'); }
+
+// ─────────────────────────────────────────────────────────────────────────────
 // INIT
 // ─────────────────────────────────────────────────────────────────────────────
 loadData();
+
+// Attach search listener after DOM is ready
+var st;
+document.addEventListener('DOMContentLoaded', function() {
+  var inp = el('search-input');
+  if (inp) {
+    inp.addEventListener('input', function() {
+      clearTimeout(st);
+      st = setTimeout(function() {
+        var f = inp.value.toLowerCase().trim();
+        var cards = qAll('#search-results .card');
+        var n = 0;
+        cards.forEach(function(c) { var m = !f || c.dataset.s.includes(f); c.style.display = m ? '' : 'none'; if (m) n++; });
+        el('search-count').innerHTML = '<strong>' + n + '</strong> item' + (n === 1 ? '' : 's') + (f ? ' matching' : '');
+      }, 120);
+    });
+  }
+});
 </script>
 </body>
 </html>
