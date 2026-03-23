@@ -13,59 +13,66 @@
 html,body{height:100%;overflow:hidden}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f0f2f5;color:#1a1a2e;display:flex;flex-direction:column}
 
-/* ── Loading ── */
+/* Loading */
 #loading{position:fixed;inset:0;background:#1a1a2e;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;transition:opacity .4s}
 #loading.hide{opacity:0;pointer-events:none}
 .spinner{width:44px;height:44px;border:3px solid rgba(255,255,255,.15);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;margin-bottom:18px}
+.spinner-sm{width:22px;height:22px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;display:inline-block}
 @keyframes spin{to{transform:rotate(360deg)}}
-#loading p{color:rgba(255,255,255,.55);font-size:.88rem;letter-spacing:.02em}
+#loading p{color:rgba(255,255,255,.55);font-size:.88rem}
 
-/* ── Error ── */
+/* Error */
 #error-screen{display:none;position:fixed;inset:0;background:#f0f2f5;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center;z-index:998}
 #error-screen.show{display:flex}
 #error-screen h2{font-size:1.1rem;margin-bottom:8px}
 #error-screen p{color:#64748b;font-size:.88rem;margin-bottom:24px;line-height:1.6}
-.btn-primary{padding:11px 28px;background:#4f8ef7;color:#fff;border:none;border-radius:10px;font-size:.95rem;font-weight:600;cursor:pointer}
 
-/* ── App shell ── */
+/* App shell */
 #app{display:flex;flex-direction:column;height:100%;opacity:0;transition:opacity .35s}
 #app.show{opacity:1}
 
-/* ── Header ── */
+/* Header */
 .header{background:#1a1a2e;flex-shrink:0;padding-top:env(safe-area-inset-top,0)}
-.header-inner{display:flex;align-items:center;padding:13px 16px;gap:10px;min-height:52px}
-#back-btn{background:none;border:none;color:rgba(255,255,255,.75);font-size:.88rem;cursor:pointer;display:none;align-items:center;gap:4px;white-space:nowrap;padding:4px 0;flex-shrink:0}
+.header-inner{display:flex;align-items:center;padding:12px 14px;gap:10px;min-height:52px}
+#back-btn{background:none;border:none;color:rgba(255,255,255,.75);font-size:.88rem;cursor:pointer;display:none;align-items:center;gap:3px;white-space:nowrap;padding:6px 0;min-height:44px;flex-shrink:0}
 #back-btn.show{display:flex}
-#back-btn:active{color:#fff}
 .header-titles{flex:1;min-width:0}
 #header-title{color:#fff;font-size:1rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #header-subtitle{color:rgba(255,255,255,.45);font-size:.72rem;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#process-btn{background:rgba(255,255,255,.12);border:none;color:#fff;border-radius:8px;padding:7px 12px;font-size:.78rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;flex-shrink:0;min-height:36px;white-space:nowrap}
+#process-btn:active{background:rgba(255,255,255,.22)}
+#process-btn.running{opacity:.7;pointer-events:none}
 
-/* ── Bottom nav ── */
+/* Bottom nav */
 .nav{background:#fff;border-top:1px solid #e8ecf0;display:flex;flex-shrink:0;padding-bottom:env(safe-area-inset-bottom,0)}
-.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:9px 8px 10px;background:none;border:none;cursor:pointer;color:#94a3b8;font-size:.7rem;font-weight:500;gap:3px;transition:color .15s}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:9px 8px 10px;background:none;border:none;cursor:pointer;color:#94a3b8;font-size:.68rem;font-weight:500;gap:3px;min-height:56px;transition:color .15s}
 .nav-btn.active{color:#4f8ef7}
-.nav-icon{font-size:1.3rem;line-height:1}
+.nav-icon{font-size:1.25rem;line-height:1}
+.nav-btn.add-btn{color:#fff}
+.nav-btn.add-btn .nav-icon-wrap{background:#4f8ef7;border-radius:14px;width:44px;height:28px;display:flex;align-items:center;justify-content:center;margin-bottom:1px}
+.nav-btn.add-btn.active .nav-icon-wrap{background:#1967d2}
 
-/* ── Views ── */
+/* Views */
 .view{display:none;flex-direction:column;flex:1;min-height:0}
 .view.active{display:flex}
 .scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
-.scroll-pad{padding:14px 14px 32px}
+.scroll-pad{padding:14px 14px 40px}
 
-/* ── Cards ── */
-.card{background:#fff;border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.07),0 4px 14px rgba(0,0,0,.04);margin-bottom:10px;overflow:hidden;transition:transform .12s,box-shadow .12s;cursor:pointer}
-.card:active{transform:scale(.985);box-shadow:0 1px 2px rgba(0,0,0,.05)}
+/* Cards */
+.card{background:#fff;border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.07),0 4px 14px rgba(0,0,0,.04);margin-bottom:10px;overflow:hidden;cursor:pointer}
+.card:active{transform:scale(.985)}
 
-/* ── Box cards ── */
-.box-card{padding:15px 16px}
+/* Box cards */
+.box-card{padding:14px 16px}
 .box-card-row{display:flex;justify-content:space-between;align-items:flex-start}
 .box-id{font-size:1rem;font-weight:700;color:#1a1a2e}
-.box-chevron{color:#c0cad8;font-size:1.1rem;margin-top:1px}
+.box-chevron{color:#c0cad8;font-size:1.1rem}
 .box-meta{font-size:.8rem;color:#64748b;margin-top:3px;line-height:1.5}
 .box-pill{display:inline-flex;align-items:center;background:#eef2ff;color:#4338ca;border-radius:20px;padding:3px 10px;font-size:.72rem;font-weight:700;margin-top:9px}
+.box-img-strip{display:flex;gap:6px;margin:10px 0 8px}
+.box-strip-img{width:72px;height:56px;border-radius:7px;object-fit:cover;background:#f0f2f5;flex-shrink:0}
 
-/* ── Item cards ── */
+/* Item cards */
 .item-card{display:flex;gap:11px;align-items:flex-start;padding:13px 14px}
 .item-img{width:58px;height:58px;border-radius:9px;object-fit:cover;background:#f0f2f5;flex-shrink:0;cursor:pointer}
 .item-img-ph{width:58px;height:58px;border-radius:9px;background:#f0f2f5;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:#cbd5e1}
@@ -74,59 +81,119 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .item-detail{font-size:.78rem;color:#64748b;line-height:1.65}
 .item-value{font-size:.78rem;color:#16a34a;font-weight:700;margin-top:2px}
 .item-date{font-size:.7rem;color:#a0aec0;margin-top:1px}
-
-/* ── Box image strip ── */
-.box-img-strip{display:flex;gap:6px;margin:10px 0 8px}
-.box-strip-img{width:72px;height:56px;border-radius:7px;object-fit:cover;background:#f0f2f5;flex-shrink:0}
 .badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:.62rem;font-weight:800;color:#fff;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
 
-/* ── Box detail ── */
+/* Box detail */
 .box-meta-block{background:#fff;border-bottom:1px solid #f0f2f5;padding:13px 16px;font-size:.82rem;color:#64748b;line-height:1.9}
 .box-meta-block strong{color:#334155;font-weight:600}
 .gallery-wrap{background:#fff;border-bottom:1px solid #f0f2f5;padding:12px 14px}
-.gallery{display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:2px}
+.gallery{display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .gallery::-webkit-scrollbar{display:none}
-.gal-img{width:88px;height:70px;border-radius:9px;object-fit:cover;flex-shrink:0;cursor:pointer;transition:transform .18s,opacity .18s}
-.gal-img:active{transform:scale(.94)}
-.items-wrap{padding:12px 14px 32px}
+.gal-img{width:88px;height:70px;border-radius:9px;object-fit:cover;flex-shrink:0;cursor:pointer}
+.add-photo-bar{background:#fff;border-bottom:1px solid #f0f2f5;padding:10px 14px}
+.add-photo-btn{display:flex;align-items:center;gap:8px;background:#f0f7ff;border:1.5px dashed #93c5fd;border-radius:10px;padding:11px 14px;width:100%;cursor:pointer;font-size:.88rem;color:#2563eb;font-weight:600}
+.add-photo-btn:active{background:#e0f2fe}
+.items-wrap{padding:12px 14px 40px}
 
-/* ── Search ── */
+/* Search */
 .search-sticky{position:sticky;top:0;background:#f0f2f5;padding:12px 14px 6px;z-index:10}
 .search-box{position:relative}
-.search-box input{width:100%;padding:10px 14px 10px 38px;background:#fff;border:1.5px solid #e2e8f0;border-radius:11px;font-size:.92rem;color:#1a1a2e;-webkit-appearance:none;box-shadow:0 1px 3px rgba(0,0,0,.05)}
-.search-box input:focus{outline:none;border-color:#4f8ef7;box-shadow:0 0 0 3px rgba(79,142,247,.12)}
+.search-box input{width:100%;padding:10px 14px 10px 38px;background:#fff;border:1.5px solid #e2e8f0;border-radius:11px;font-size:16px;color:#1a1a2e;-webkit-appearance:none}
+.search-box input:focus{outline:none;border-color:#4f8ef7}
 .search-box::before{content:'🔍';position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:.85rem;pointer-events:none}
 .count-bar{font-size:.8rem;color:#94a3b8;padding:6px 14px 2px}
 .count-bar strong{color:#334155}
-
-/* ── Search result card ── */
 .result-card{display:flex;align-items:center;padding:13px 14px;gap:10px}
 .result-body{flex:1;min-width:0}
-.result-link{color:#4f8ef7;font-size:.78rem;font-weight:700;white-space:nowrap;flex-shrink:0;cursor:pointer;padding:4px 0}
-.result-link:active{opacity:.7}
+.result-link{color:#4f8ef7;font-size:.78rem;font-weight:700;white-space:nowrap;flex-shrink:0;cursor:pointer;padding:6px 0;min-height:44px;display:flex;align-items:center}
 
-/* ── Empty state ── */
+/* Empty */
 .empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:64px 24px;text-align:center;color:#94a3b8}
 .empty-icon{font-size:2.8rem;margin-bottom:14px}
 .empty p{font-size:.88rem;line-height:1.6}
 
-/* ── Lightbox ── */
+/* ── ADD BOX FORM ── */
+.form-section{padding:16px 14px 0}
+.form-section-title{font-size:.72rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.type-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:4px}
+.type-chip{padding:11px 10px;border:2px solid #e2e8f0;border-radius:10px;background:#fff;font-size:.82rem;font-weight:600;color:#475569;cursor:pointer;text-align:center;transition:all .15s;line-height:1.3}
+.type-chip:active{transform:scale(.96)}
+.type-chip.selected{border-color:#4f8ef7;background:#eff6ff;color:#1d4ed8}
+.form-field{margin-bottom:14px}
+.form-label{font-size:.78rem;font-weight:600;color:#64748b;margin-bottom:6px;display:block}
+.form-input{width:100%;padding:13px 14px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:16px;color:#1a1a2e;background:#fff;-webkit-appearance:none}
+.form-input:focus{outline:none;border-color:#4f8ef7}
+.form-input::placeholder{color:#94a3b8}
+.picker-btn{width:100%;padding:13px 14px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:16px;color:#1a1a2e;background:#fff;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.picker-btn.placeholder{color:#94a3b8}
+.picker-btn:active{background:#f8fafc}
+.picker-chevron{color:#94a3b8;font-size:.9rem}
+.form-hint{font-size:.72rem;color:#94a3b8;margin-top:4px}
+.photo-preview-wrap{margin-bottom:14px}
+.photo-pick-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.photo-pick-btn{padding:14px 10px;border:2px dashed #cbd5e1;border-radius:12px;background:#f8fafc;font-size:.82rem;font-weight:600;color:#64748b;cursor:pointer;text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px;min-height:76px;justify-content:center}
+.photo-pick-btn .pb-icon{font-size:1.5rem}
+.photo-pick-btn:active{background:#f0f2f5}
+.photo-preview{width:100%;height:160px;object-fit:cover;border-radius:12px;margin-bottom:8px;display:none}
+.form-save-wrap{padding:14px;position:sticky;bottom:0;background:#f0f2f5;border-top:1px solid #e8ecf0}
+.btn-save{width:100%;padding:15px;background:#4f8ef7;color:#fff;border:none;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px}
+.btn-save:active{background:#3b82f6}
+.btn-save:disabled{background:#94a3b8;pointer-events:none}
+.btn-primary{padding:11px 28px;background:#4f8ef7;color:#fff;border:none;border-radius:10px;font-size:.95rem;font-weight:600;cursor:pointer}
+
+/* ── BOTTOM SHEET ── */
+.sheet-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:flex-end}
+.sheet-overlay.open{display:flex}
+.sheet{background:#fff;border-radius:20px 20px 0 0;width:100%;max-height:82vh;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1)}
+.sheet-overlay.open .sheet{transform:translateY(0)}
+.sheet-handle{width:36px;height:4px;background:#e2e8f0;border-radius:2px;margin:10px auto 0}
+.sheet-header{padding:14px 18px 10px;font-size:1rem;font-weight:700;color:#1a1a2e;flex-shrink:0}
+.sheet-scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1}
+.sheet-item{padding:14px 18px;font-size:.95rem;color:#1a1a2e;border-bottom:1px solid #f0f2f5;cursor:pointer;min-height:52px;display:flex;align-items:center}
+.sheet-item:last-child{border-bottom:none}
+.sheet-item:active{background:#f8fafc}
+.sheet-item.selected{color:#4f8ef7;font-weight:600}
+.sheet-item.selected::after{content:'✓';margin-left:auto;font-size:1rem}
+
+/* Photo sheet */
+.photo-sheet-content{padding:16px 18px 32px;display:flex;flex-direction:column;gap:12px}
+.photo-mode-toggle{display:flex;background:#f0f2f5;border-radius:10px;padding:3px;margin-bottom:4px}
+.photo-mode-btn{flex:1;padding:9px;border:none;background:none;border-radius:8px;font-size:.85rem;font-weight:600;color:#64748b;cursor:pointer;transition:all .15s}
+.photo-mode-btn.active{background:#fff;color:#1a1a2e;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.photo-sheet-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.photo-sheet-btn{padding:16px 12px;border:2px solid #e2e8f0;border-radius:12px;background:#fff;font-size:.85rem;font-weight:600;color:#334155;cursor:pointer;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;min-height:80px;justify-content:center}
+.photo-sheet-btn .psb-icon{font-size:1.6rem}
+.photo-sheet-btn:active{background:#f8fafc}
+.photo-sheet-preview{width:100%;height:140px;object-fit:cover;border-radius:10px;display:none}
+.photo-sheet-upload{width:100%;padding:14px;background:#4f8ef7;color:#fff;border:none;border-radius:12px;font-size:.95rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px}
+.photo-sheet-upload:disabled{background:#94a3b8}
+.photo-sheet-upload:active{background:#3b82f6}
+
+/* Process overlay */
+#process-overlay{display:none;position:fixed;inset:0;background:rgba(26,26,46,.88);z-index:600;flex-direction:column;align-items:center;justify-content:center;padding:32px}
+#process-overlay.open{display:flex}
+#process-overlay .spinner{border-top-color:#fff}
+#process-title{color:#fff;font-size:1.1rem;font-weight:700;margin-bottom:8px}
+#process-msg{color:rgba(255,255,255,.6);font-size:.85rem;text-align:center;line-height:1.6;max-width:280px}
+
+/* Toast */
+#toast{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 72px);left:50%;transform:translateX(-50%) translateY(20px);background:#1e293b;color:#fff;padding:10px 20px;border-radius:24px;font-size:.85rem;font-weight:500;z-index:700;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap;max-width:90vw;text-overflow:ellipsis;overflow:hidden}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.error{background:#dc2626}
+
+/* Lightbox */
 #lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;align-items:center;justify-content:center;padding:16px}
 #lightbox.open{display:flex}
 #lb-img{max-width:100%;max-height:90vh;border-radius:10px;object-fit:contain}
-#lb-close{position:absolute;top:18px;right:20px;background:rgba(255,255,255,.12);border:none;color:#fff;font-size:1.3rem;width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
-#lb-close:active{background:rgba(255,255,255,.25)}
+#lb-close{position:absolute;top:18px;right:20px;background:rgba(255,255,255,.12);border:none;color:#fff;font-size:1.3rem;width:40px;height:40px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center}
+
+@media(max-width:380px){.type-grid{grid-template-columns:1fr 1fr}.type-chip{font-size:.78rem}}
 </style>
 </head>
 <body>
 
-<!-- Loading -->
-<div id="loading">
-  <div class="spinner"></div>
-  <p>Loading inventory…</p>
-</div>
+<div id="loading"><div class="spinner"></div><p>Loading inventory…</p></div>
 
-<!-- Error -->
 <div id="error-screen">
   <div class="empty-icon">⚠️</div>
   <h2>Could not load inventory</h2>
@@ -134,9 +201,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
   <button class="btn-primary" onclick="loadData()">Try again</button>
 </div>
 
-<!-- App -->
 <div id="app">
-
   <div class="header">
     <div class="header-inner">
       <button id="back-btn" onclick="goBack()">‹ Back</button>
@@ -144,21 +209,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
         <div id="header-title">My Inventory</div>
         <div id="header-subtitle"></div>
       </div>
+      <button id="process-btn" onclick="triggerProcess()">
+        <span id="process-btn-icon">⚡</span> Process
+      </button>
     </div>
   </div>
 
   <!-- Browse -->
   <div class="view active" id="view-browse">
-    <div class="scroll">
-      <div class="scroll-pad" id="boxes-list"></div>
-    </div>
+    <div class="scroll"><div class="scroll-pad" id="boxes-list"></div></div>
   </div>
 
   <!-- Box detail -->
   <div class="view" id="view-box">
-    <div class="scroll" id="box-scroll">
-      <div id="box-content"></div>
-    </div>
+    <div class="scroll" id="box-scroll"><div id="box-content"></div></div>
   </div>
 
   <!-- Search -->
@@ -170,7 +234,71 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
         </div>
       </div>
       <div class="count-bar" id="search-count"></div>
-      <div style="padding:4px 14px 32px" id="search-results"></div>
+      <div style="padding:4px 14px 40px" id="search-results"></div>
+    </div>
+  </div>
+
+  <!-- Add box -->
+  <div class="view" id="view-add">
+    <div class="scroll" id="add-scroll">
+
+      <div class="form-section">
+        <div class="form-section-title">Storage type</div>
+        <div class="type-grid" id="type-grid"></div>
+      </div>
+
+      <div class="form-section" style="margin-top:4px">
+        <div class="form-field">
+          <label class="form-label">Storage unit ID</label>
+          <input class="form-input" id="add-id" type="text" placeholder="e.g. Box 20" autocomplete="off" autocorrect="off" autocapitalize="words">
+          <div class="form-hint" id="add-id-hint">Auto-filled based on type</div>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Location</label>
+          <button class="picker-btn placeholder" id="loc-btn" onclick="openPicker('location')">
+            <span id="loc-label">Select location…</span>
+            <span class="picker-chevron">›</span>
+          </button>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Collection <span style="color:#94a3b8;font-weight:400">(optional — Claude can suggest)</span></label>
+          <button class="picker-btn placeholder" id="coll-btn" onclick="openPicker('collection')">
+            <span id="coll-label">Let Claude decide from photo…</span>
+            <span class="picker-chevron">›</span>
+          </button>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Description <span style="color:#94a3b8;font-weight:400">(optional)</span></label>
+          <input class="form-input" id="add-desc" type="text" placeholder="e.g. Camping gear and sleeping bags" autocomplete="off">
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Photo <span style="color:#94a3b8;font-weight:400">(optional — can add later)</span></label>
+          <img id="add-photo-preview" class="photo-preview" alt="Preview">
+          <div class="photo-pick-btns">
+            <button class="photo-pick-btn" onclick="document.getElementById('add-photo-camera').click()">
+              <span class="pb-icon">📷</span>Take photo
+            </button>
+            <button class="photo-pick-btn" onclick="document.getElementById('add-photo-gallery').click()">
+              <span class="pb-icon">🖼️</span>Choose photo
+            </button>
+          </div>
+          <input type="file" id="add-photo-camera" accept="image/*" capture="environment" style="display:none">
+          <input type="file" id="add-photo-gallery" accept="image/*" style="display:none">
+        </div>
+      </div>
+
+      <div style="height:80px"></div>
+    </div>
+
+    <div class="form-save-wrap">
+      <button class="btn-save" id="add-save-btn" onclick="saveNewBox()">
+        <span id="add-save-icon">✓</span>
+        <span id="add-save-label">Save storage unit</span>
+      </button>
     </div>
   </div>
 
@@ -181,9 +309,60 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <button class="nav-btn" id="nav-search" onclick="switchTab('search')">
       <span class="nav-icon">🔍</span>Search
     </button>
+    <button class="nav-btn add-btn" id="nav-add" onclick="switchTab('add')">
+      <div class="nav-icon-wrap"><span style="font-size:1.3rem;line-height:1">＋</span></div>
+      Add
+    </button>
   </nav>
-
 </div>
+
+<!-- Photo sheet (add photo to existing box) -->
+<div class="sheet-overlay" id="photo-sheet-overlay" onclick="if(event.target===this)closePhotoSheet()">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header" id="photo-sheet-title">Add Photo</div>
+    <div class="photo-sheet-content">
+      <div class="photo-mode-toggle">
+        <button class="photo-mode-btn active" id="mode-add-btn" onclick="setPhotoMode('add')">Add items</button>
+        <button class="photo-mode-btn" id="mode-replace-btn" onclick="setPhotoMode('replace')">Replace all items</button>
+      </div>
+      <div style="font-size:.78rem;color:#94a3b8;margin-bottom:4px" id="photo-mode-hint">New items will be added alongside existing ones.</div>
+      <img id="photo-sheet-preview" class="photo-sheet-preview" alt="Preview">
+      <div class="photo-sheet-btns">
+        <button class="photo-sheet-btn" onclick="document.getElementById('box-photo-camera').click()">
+          <span class="psb-icon">📷</span>Take photo
+        </button>
+        <button class="photo-sheet-btn" onclick="document.getElementById('box-photo-gallery').click()">
+          <span class="psb-icon">🖼️</span>Choose photo
+        </button>
+      </div>
+      <input type="file" id="box-photo-camera" accept="image/*" capture="environment" style="display:none">
+      <input type="file" id="box-photo-gallery" accept="image/*" style="display:none">
+      <button class="photo-sheet-upload" id="photo-sheet-upload-btn" onclick="uploadBoxPhoto()" disabled>
+        Queue photo for processing
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Picker sheet (location / collection) -->
+<div class="sheet-overlay" id="picker-overlay" onclick="if(event.target===this)closePicker()">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header" id="picker-title">Select</div>
+    <div class="sheet-scroll" id="picker-list"></div>
+  </div>
+</div>
+
+<!-- Process overlay -->
+<div id="process-overlay">
+  <div class="spinner" style="margin-bottom:20px"></div>
+  <div id="process-title">Processing photos…</div>
+  <div id="process-msg">Claude is analysing your photos. This may take a minute.</div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
 
 <!-- Lightbox -->
 <div id="lightbox" onclick="if(event.target===this)closeLightbox()">
@@ -193,14 +372,68 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 
 <script>
 // ─────────────────────────────────────────────────────────────────────────────
-// CONFIG — do not change this URL
+// CONFIG
 // ─────────────────────────────────────────────────────────────────────────────
-const DATA_URL = 'https://script.google.com/macros/s/AKfycbwW2ZLQj5EGXARJT0d-ThtPRJLhHXj0B-ekqrqlLWIU0PPO6Ik9TfIqr1a1cmkGs8QG/exec?view=data';
+const API_BASE = 'https://script.google.com/macros/s/AKfycbwW2ZLQj5EGXARJT0d-ThtPRJLhHXj0B-ekqrqlLWIU0PPO6Ik9TfIqr1a1cmkGs8QG/exec';
+const DATA_URL = API_BASE + '?view=data';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// STORAGE TYPES & ID PREFIXES
+// ─────────────────────────────────────────────────────────────────────────────
+const STORAGE_TYPES = [
+  { label: 'Box',                   prefix: 'Box' },
+  { label: 'Plastic crate',         prefix: 'Box' },
+  { label: 'Tub or bin',            prefix: 'Box' },
+  { label: 'Folder or file box',    prefix: 'Box' },
+  { label: 'Toolbox',               prefix: 'Toolbox' },
+  { label: 'Tool chest / trolley',  prefix: 'Toolbox' },
+  { label: 'Shelf',                 prefix: 'Shelf' },
+  { label: 'Cupboard',              prefix: 'Cupboard' },
+  { label: 'Drawer',                prefix: 'Drawer' },
+  { label: 'Hanging rail / hook',   prefix: 'Rail' },
+  { label: 'Under-bed',             prefix: 'Underbed' },
+  { label: 'Bag',                   prefix: 'Bag' },
+  { label: 'Suitcase',              prefix: 'Suitcase' },
+  { label: 'Trunk or chest',        prefix: 'Trunk' },
+  { label: 'Other',                 prefix: 'Other' }
+];
+
+const LOCATIONS = [
+  'Back WC','Craft Room','Attic','Benjamin\'s Room','Boot Room','Cellar',
+  'Charlotte\'s Room','Dining Room','Family Bathroom','Games Room','Garage',
+  'Garden Shed','Guest Bathroom','Guest Bedroom','Guest Toilet','Hallway',
+  'Joel\'s Room','Kid\'s Bathroom','Kitchen','Landing','Link Corridor',
+  'Living Room','Master Bedroom','Master Ensuite','Mezzanine','Pantry',
+  'Playroom','Porch','Shed','Sitting Room','Study','Sun Room',
+  'Top Landing','Utility Room','Other (please specify)'
+];
+
+const COLLECTIONS = [
+  'Tools','DIY supplies (screws, fixings, glue)','Paint and decorating',
+  'Electrical and cables','Plumbing parts','Garden and outdoor',
+  'Car parts and accessories','Christmas decorations',
+  'Other seasonal decorations (Easter, autumn etc)','Party supplies',
+  'Camping and hiking','Sports equipment','Music gear and audio',
+  'Toys','Board games and puzzles','Lego and construction toys',
+  'Books','Kids\' clothes','Adult clothes','Shoes and boots',
+  'School memorabilia','Family memorabilia and keepsakes',
+  'Photos and albums','Paperwork and archives',
+  'Kitchen spares (appliances, gadgets)','Household spares (bulbs, batteries, filters)',
+  'Tech and gadgets','Craft and sewing',
+  'Gift wrap, cards and spare gifts','Mixed household items','To sort'
+];
 
 // ─────────────────────────────────────────────────────────────────────────────
 // STATE
 // ─────────────────────────────────────────────────────────────────────────────
-const S = { boxes: [], tools: [], tab: 'browse', box: null };
+const S = {
+  boxes: [], tools: [],
+  tab: 'browse', box: null,
+  addType: null, addLocation: '', addCollection: '',
+  addPhotoFile: null,
+  boxPhotoFile: null, boxPhotoMode: 'add', currentBoxId: null,
+  pickerTarget: null
+};
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CATEGORY COLOURS
@@ -216,6 +449,56 @@ const COLOURS = {
 const colour = cat => COLOURS[(cat||'').toLowerCase()] || '#64748b';
 
 // ─────────────────────────────────────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────────────────────────────────────
+const el    = id => document.getElementById(id);
+const qAll  = sel => document.querySelectorAll(sel);
+const empty = (icon, msg) => '<div class="empty"><div class="empty-icon">' + icon + '</div><p>' + msg + '</p></div>';
+
+function x(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function fmtDate(v) {
+  if (!v) return '';
+  try {
+    const d = new Date(v);
+    if (isNaN(d.getTime())) return String(v);
+    return d.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
+  } catch(e) { return String(v); }
+}
+
+var toastTimer;
+function toast(msg, isError) {
+  const t = el('toast');
+  t.textContent = msg;
+  t.className = 'show' + (isError ? ' error' : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function() { t.className = ''; }, 3000);
+}
+
+// Resize image to max 1600px, 80% JPEG quality → reduces upload size significantly
+function resizeImage(file, maxPx, quality, cb) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      let w = img.width, h = img.height;
+      if (w > maxPx || h > maxPx) {
+        if (w > h) { h = Math.round(h * maxPx / w); w = maxPx; }
+        else       { w = Math.round(w * maxPx / h); h = maxPx; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      cb(canvas.toDataURL('image/jpeg', quality));
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // DATA
 // ─────────────────────────────────────────────────────────────────────────────
 async function loadData() {
@@ -223,7 +506,7 @@ async function loadData() {
   el('error-screen').classList.remove('show');
   el('app').classList.remove('show');
   try {
-    const res = await fetch(DATA_URL);
+    const res  = await fetch(DATA_URL);
     if (!res.ok) throw new Error('Server returned ' + res.status);
     const data = await res.json();
     if (data.error) throw new Error(data.error);
@@ -231,6 +514,7 @@ async function loadData() {
     S.tools = data.tools || [];
     renderBrowse();
     renderSearch();
+    buildTypeGrid();
     el('loading').classList.add('hide');
     el('app').classList.add('show');
   } catch (err) {
@@ -249,9 +533,11 @@ function switchTab(tab) {
   qAll('.nav-btn').forEach(b => b.classList.remove('active'));
   el('view-' + tab).classList.add('active');
   el('nav-' + tab).classList.add('active');
-  el('header-title').textContent = tab === 'search' ? 'Search' : 'My Inventory';
+  const titles = { browse: 'My Inventory', search: 'Search', add: 'Add Storage Unit' };
+  el('header-title').textContent = titles[tab] || 'My Inventory';
   el('header-subtitle').textContent = '';
   el('back-btn').classList.remove('show');
+  if (tab === 'add') resetAddForm();
 }
 
 function openBox(boxId) {
@@ -280,7 +566,8 @@ function goBack() {
   qAll('.nav-btn').forEach(b => b.classList.remove('active'));
   el('view-' + S.tab).classList.add('active');
   el('nav-' + S.tab).classList.add('active');
-  el('header-title').textContent = S.tab === 'search' ? 'Search' : 'My Inventory';
+  const titles = { browse: 'My Inventory', search: 'Search', add: 'Add Storage Unit' };
+  el('header-title').textContent = titles[S.tab] || 'My Inventory';
   el('header-subtitle').textContent = '';
   el('back-btn').classList.remove('show');
 }
@@ -290,18 +577,13 @@ function goBack() {
 // ─────────────────────────────────────────────────────────────────────────────
 function renderBrowse() {
   const wrap = el('boxes-list');
-  if (!S.boxes.length) {
-    wrap.innerHTML = empty('📦', 'No storage units found.');
-    return;
-  }
+  if (!S.boxes.length) { wrap.innerHTML = empty('📦', 'No storage units found.'); return; }
 
-  // Build a map of box ID -> first 3 unique image URLs
   const boxImages = {};
   S.tools.forEach(function(item) {
     if (!item.imageUrl) return;
     if (!boxImages[item.storageId]) boxImages[item.storageId] = [];
-    if (boxImages[item.storageId].length < 3 &&
-        !boxImages[item.storageId].includes(item.imageUrl)) {
+    if (boxImages[item.storageId].length < 3 && !boxImages[item.storageId].includes(item.imageUrl)) {
       boxImages[item.storageId].push(item.imageUrl);
     }
   });
@@ -310,18 +592,15 @@ function renderBrowse() {
     const meta = [box.storageType, box.collection, box.location].filter(Boolean).join(' · ');
     const desc = box.description ? '<div style="margin-top:2px;font-size:.8rem;color:#64748b">' + x(box.description) + '</div>' : '';
     const imgs = boxImages[box.id] || [];
-    const imgStrip = imgs.length
-      ? '<div class="box-img-strip">' +
-        imgs.map(function(url) {
+    const strip = imgs.length
+      ? '<div class="box-img-strip">' + imgs.map(function(url) {
           return '<img class="box-strip-img" src="' + url + '" onerror="this.style.display=\'none\'" loading="lazy">';
-        }).join('') +
-        '</div>'
+        }).join('') + '</div>'
       : '';
     return '<div class="card box-card" onclick="openBox(\'' + x(box.id) + '\')">'
       + '<div class="box-card-row"><div class="box-id">' + x(box.id) + '</div><div class="box-chevron">›</div></div>'
       + (meta ? '<div class="box-meta">' + x(meta) + '</div>' : '')
-      + desc
-      + imgStrip
+      + desc + strip
       + '<div class="box-pill">' + box.itemCount + ' item' + (box.itemCount === 1 ? '' : 's') + '</div>'
       + '</div>';
   }).join('');
@@ -335,7 +614,6 @@ function renderBoxDetail(boxId) {
   const items = S.tools.filter(t => t.storageId === boxId);
   let html    = '';
 
-  // Metadata block
   const rows = [];
   if (box.storageType) rows.push('<strong>Type</strong>&ensp;' + x(box.storageType));
   if (box.collection)  rows.push('<strong>Collection</strong>&ensp;' + x(box.collection));
@@ -345,7 +623,6 @@ function renderBoxDetail(boxId) {
     html += '<div class="box-meta-block">' + rows.map(r => '<div>' + r + '</div>').join('') + '</div>';
   }
 
-  // Image gallery — unique URLs only
   const seen = {}; const imgs = [];
   items.forEach(item => { if (item.imageUrl && !seen[item.imageUrl]) { imgs.push(item.imageUrl); seen[item.imageUrl] = true; } });
   if (imgs.length) {
@@ -354,7 +631,8 @@ function renderBoxDetail(boxId) {
       + '</div></div>';
   }
 
-  // Items
+  html += '<div class="add-photo-bar"><button class="add-photo-btn" onclick="openPhotoSheet(\'' + x(boxId) + '\')">📷&ensp;Add or update photo</button></div>';
+
   if (!items.length) {
     html += '<div class="items-wrap">' + empty('📋', 'No items recorded yet.') + '</div>';
   } else {
@@ -372,14 +650,12 @@ function itemCard(item) {
   const meta = [item.brand, item.size, item.condition].filter(Boolean).map(x).join(' · ');
   const val  = item.estValue ? '<div class="item-value">Est. £' + Number(item.estValue).toFixed(2) + '</div>' : '';
   const date = item.lastSeen ? '<div class="item-date">' + fmtDate(item.lastSeen) + '</div>' : '';
-  return '<div class="card item-card">'
-    + img
+  return '<div class="card item-card">' + img
     + '<div class="item-body">'
     + '<div class="badge" style="background:' + c + '">' + x(item.category || 'Other') + '</div>'
     + '<div class="item-name">' + x(item.name) + '</div>'
     + (meta ? '<div class="item-detail">' + meta + '</div>' : '')
-    + val + date
-    + '</div></div>';
+    + val + date + '</div></div>';
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -407,23 +683,293 @@ function renderSearch() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// HELPERS
+// ADD BOX FORM
 // ─────────────────────────────────────────────────────────────────────────────
-const el    = id => document.getElementById(id);
-const qAll  = sel => document.querySelectorAll(sel);
-const empty = (icon, msg) => '<div class="empty"><div class="empty-icon">' + icon + '</div><p>' + msg + '</p></div>';
-
-function x(s) {
-  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+function buildTypeGrid() {
+  el('type-grid').innerHTML = STORAGE_TYPES.map((t, i) =>
+    '<button class="type-chip" data-i="' + i + '" onclick="selectType(' + i + ')">' + t.label + '</button>'
+  ).join('');
 }
 
-function fmtDate(v) {
-  if (!v) return '';
+function resetAddForm() {
+  S.addType = null; S.addLocation = ''; S.addCollection = ''; S.addPhotoFile = null;
+  qAll('.type-chip').forEach(c => c.classList.remove('selected'));
+  el('add-id').value = '';
+  el('add-id-hint').textContent = 'Auto-filled based on type';
+  el('loc-btn').className = 'picker-btn placeholder';
+  el('loc-label').textContent = 'Select location…';
+  el('coll-btn').className = 'picker-btn placeholder';
+  el('coll-label').textContent = 'Let Claude decide from photo…';
+  el('add-desc').value = '';
+  el('add-photo-preview').style.display = 'none';
+  el('add-photo-preview').src = '';
+  el('add-scroll').scrollTop = 0;
+}
+
+function selectType(index) {
+  S.addType = STORAGE_TYPES[index];
+  qAll('.type-chip').forEach((c, i) => c.classList.toggle('selected', i === index));
+  fetchNextId(S.addType.prefix);
+}
+
+async function fetchNextId(prefix) {
+  el('add-id-hint').textContent = 'Looking up next ID…';
   try {
-    const d = new Date(v);
-    if (isNaN(d.getTime())) return String(v);
-    return d.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
-  } catch(e) { return String(v); }
+    const res  = await fetch(API_BASE + '?view=nextid&prefix=' + encodeURIComponent(prefix));
+    const data = await res.json();
+    if (data.nextId) {
+      el('add-id').value = data.nextId;
+      el('add-id-hint').textContent = 'Auto-filled — you can edit this';
+    }
+  } catch(e) {
+    el('add-id-hint').textContent = 'Could not auto-fill — please enter manually';
+  }
+}
+
+// Picker
+var pickerValues = { location: LOCATIONS, collection: COLLECTIONS };
+
+function openPicker(target) {
+  S.pickerTarget = target;
+  const isLoc   = target === 'location';
+  el('picker-title').textContent = isLoc ? 'Select location' : 'Select collection';
+  const selected = isLoc ? S.addLocation : S.addCollection;
+  const items    = pickerValues[target];
+  el('picker-list').innerHTML = items.map(function(item) {
+    const sel = item === selected ? ' selected' : '';
+    return '<div class="sheet-item' + sel + '" onclick="pickerSelect(\'' + x(item) + '\')">' + x(item) + '</div>';
+  }).join('');
+  openSheet('picker-overlay');
+}
+
+function pickerSelect(value) {
+  if (S.pickerTarget === 'location') {
+    S.addLocation = value;
+    el('loc-label').textContent = value;
+    el('loc-btn').className = 'picker-btn';
+  } else {
+    S.addCollection = value;
+    el('coll-label').textContent = value;
+    el('coll-btn').className = 'picker-btn';
+  }
+  closePicker();
+}
+
+function closePicker() { closeSheet('picker-overlay'); }
+
+// Photo for new box
+function handleAddPhoto(file) {
+  if (!file) return;
+  S.addPhotoFile = file;
+  const preview = el('add-photo-preview');
+  const reader  = new FileReader();
+  reader.onload = function(e) { preview.src = e.target.result; preview.style.display = 'block'; };
+  reader.readAsDataURL(file);
+}
+
+el('add-photo-camera').addEventListener('change', function() { if (this.files[0]) handleAddPhoto(this.files[0]); });
+el('add-photo-gallery').addEventListener('change', function() { if (this.files[0]) handleAddPhoto(this.files[0]); });
+
+async function saveNewBox() {
+  const id   = el('add-id').value.trim();
+  const desc = el('add-desc').value.trim();
+
+  if (!id) { toast('Please enter a storage unit ID', true); return; }
+  if (!S.addLocation) { toast('Please select a location', true); return; }
+
+  const btn = el('add-save-btn');
+  btn.disabled = true;
+  el('add-save-icon').innerHTML = '<span class="spinner-sm"></span>';
+  el('add-save-label').textContent = 'Saving…';
+
+  try {
+    // 1. Create box in sheet
+    const createRes = await fetch(API_BASE, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action:      'createBox',
+        storageId:   id,
+        storageType: S.addType ? S.addType.label : '',
+        collection:  S.addCollection,
+        location:    S.addLocation,
+        description: desc
+      })
+    });
+    const createData = await createRes.json();
+    if (createData.error) throw new Error(createData.error);
+
+    // 2. Upload photo if provided
+    if (S.addPhotoFile) {
+      el('add-save-label').textContent = 'Uploading photo…';
+      await uploadPhotoFile(S.addPhotoFile, id, false);
+    }
+
+    toast('✓ ' + id + ' saved' + (S.addPhotoFile ? ' — photo queued' : ''));
+
+    // Reload data and go to browse
+    await loadDataSilent();
+    switchTab('browse');
+
+  } catch(err) {
+    toast(err.message || 'Save failed', true);
+  } finally {
+    btn.disabled = false;
+    el('add-save-icon').textContent = '✓';
+    el('add-save-label').textContent = 'Save storage unit';
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PHOTO SHEET (add photo to existing box)
+// ─────────────────────────────────────────────────────────────────────────────
+function openPhotoSheet(boxId) {
+  S.currentBoxId  = boxId;
+  S.boxPhotoFile  = null;
+  S.boxPhotoMode  = 'add';
+  el('photo-sheet-title').textContent = 'Add Photo — ' + boxId;
+  el('photo-sheet-preview').style.display = 'none';
+  el('photo-sheet-preview').src = '';
+  el('photo-sheet-upload-btn').disabled = true;
+  el('mode-add-btn').classList.add('active');
+  el('mode-replace-btn').classList.remove('active');
+  el('photo-mode-hint').textContent = 'New items will be added alongside existing ones.';
+  el('box-photo-camera').value = '';
+  el('box-photo-gallery').value = '';
+  openSheet('photo-sheet-overlay');
+}
+
+function closePhotoSheet() { closeSheet('photo-sheet-overlay'); }
+
+function setPhotoMode(mode) {
+  S.boxPhotoMode = mode;
+  el('mode-add-btn').classList.toggle('active', mode === 'add');
+  el('mode-replace-btn').classList.toggle('active', mode === 'replace');
+  el('photo-mode-hint').textContent = mode === 'replace'
+    ? '⚠️ All existing items for this unit will be deleted and replaced.'
+    : 'New items will be added alongside existing ones.';
+}
+
+function handleBoxPhoto(file) {
+  if (!file) return;
+  S.boxPhotoFile = file;
+  const preview  = el('photo-sheet-preview');
+  const reader   = new FileReader();
+  reader.onload  = function(e) { preview.src = e.target.result; preview.style.display = 'block'; };
+  reader.readAsDataURL(file);
+  el('photo-sheet-upload-btn').disabled = false;
+}
+
+el('box-photo-camera').addEventListener('change', function() { if (this.files[0]) handleBoxPhoto(this.files[0]); });
+el('box-photo-gallery').addEventListener('change', function() { if (this.files[0]) handleBoxPhoto(this.files[0]); });
+
+async function uploadBoxPhoto() {
+  if (!S.boxPhotoFile || !S.currentBoxId) return;
+  const btn = el('photo-sheet-upload-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner-sm"></span>&ensp;Uploading…';
+
+  try {
+    await uploadPhotoFile(S.boxPhotoFile, S.currentBoxId, S.boxPhotoMode === 'replace');
+    closePhotoSheet();
+    toast('✓ Photo queued — tap Process to analyse');
+    if (S.boxPhotoMode === 'replace') await loadDataSilent();
+  } catch(err) {
+    toast(err.message || 'Upload failed', true);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Queue photo for processing';
+  }
+}
+
+async function uploadPhotoFile(file, storageId, replace) {
+  return new Promise(function(resolve, reject) {
+    resizeImage(file, 1600, 0.82, async function(dataUrl) {
+      try {
+        const base64 = dataUrl.split(',')[1];
+        const res    = await fetch(API_BASE, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action:    'uploadPhoto',
+            storageId: storageId,
+            base64:    base64,
+            mimeType:  'image/jpeg',
+            replace:   replace
+          })
+        });
+        const data = await res.json();
+        if (data.error) reject(new Error(data.error));
+        else resolve(data);
+      } catch(e) { reject(e); }
+    });
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PROCESS INBOX
+// ─────────────────────────────────────────────────────────────────────────────
+async function triggerProcess() {
+  const btn = el('process-btn');
+  btn.classList.add('running');
+  el('process-btn-icon').innerHTML = '<span class="spinner-sm" style="width:14px;height:14px;border-width:2px"></span>';
+
+  el('process-overlay').classList.add('open');
+  el('process-title').textContent = 'Processing photos…';
+  el('process-msg').textContent = 'Claude is analysing your photos. This may take a minute or two.';
+
+  try {
+    const res  = await fetch(API_BASE + '?view=process');
+    const data = await res.json();
+
+    el('process-overlay').classList.remove('open');
+
+    if (data.error) {
+      toast('Error: ' + data.error, true);
+    } else if (data.processed === 0 && (!data.summary || !data.summary.length)) {
+      toast('📭 Inbox is empty — nothing to process');
+    } else {
+      const msg = data.processed + ' photo' + (data.processed === 1 ? '' : 's') + ', ' + data.items + ' item' + (data.items === 1 ? '' : 's') + ' added';
+      toast('✓ ' + msg);
+      await loadDataSilent();
+    }
+  } catch(err) {
+    el('process-overlay').classList.remove('open');
+    toast('Process failed: ' + err.message, true);
+  } finally {
+    btn.classList.remove('running');
+    el('process-btn-icon').textContent = '⚡';
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SILENT RELOAD (refreshes data without showing loading screen)
+// ─────────────────────────────────────────────────────────────────────────────
+async function loadDataSilent() {
+  try {
+    const res  = await fetch(DATA_URL);
+    const data = await res.json();
+    if (!data.error) {
+      S.boxes = data.boxes || [];
+      S.tools = data.tools || [];
+      renderBrowse();
+      renderSearch();
+      if (S.box) renderBoxDetail(S.box);
+    }
+  } catch(e) { /* silent fail */ }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SHEET HELPERS
+// ─────────────────────────────────────────────────────────────────────────────
+function openSheet(id) {
+  el(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeSheet(id) {
+  el(id).classList.remove('open');
+  document.body.style.overflow = '';
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -433,27 +979,32 @@ function openLightbox(url) { el('lb-img').src = url; el('lightbox').classList.ad
 function closeLightbox()   { el('lightbox').classList.remove('open'); }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// SEARCH FILTER
+// ─────────────────────────────────────────────────────────────────────────────
+var searchTimer;
+document.addEventListener('DOMContentLoaded', function() {
+  var inp = el('search-input');
+  if (!inp) return;
+  inp.addEventListener('input', function() {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(function() {
+      var f = inp.value.toLowerCase().trim();
+      var cards = qAll('#search-results .card');
+      var n = 0;
+      cards.forEach(function(c) {
+        var m = !f || c.dataset.s.includes(f);
+        c.style.display = m ? '' : 'none';
+        if (m) n++;
+      });
+      el('search-count').innerHTML = '<strong>' + n + '</strong> item' + (n === 1 ? '' : 's') + (f ? ' matching' : '');
+    }, 120);
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
 // INIT
 // ─────────────────────────────────────────────────────────────────────────────
 loadData();
-
-// Attach search listener after DOM is ready
-var st;
-document.addEventListener('DOMContentLoaded', function() {
-  var inp = el('search-input');
-  if (inp) {
-    inp.addEventListener('input', function() {
-      clearTimeout(st);
-      st = setTimeout(function() {
-        var f = inp.value.toLowerCase().trim();
-        var cards = qAll('#search-results .card');
-        var n = 0;
-        cards.forEach(function(c) { var m = !f || c.dataset.s.includes(f); c.style.display = m ? '' : 'none'; if (m) n++; });
-        el('search-count').innerHTML = '<strong>' + n + '</strong> item' + (n === 1 ? '' : 's') + (f ? ' matching' : '');
-      }, 120);
-    });
-  }
-});
 </script>
 </body>
 </html>
