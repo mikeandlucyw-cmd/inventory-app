@@ -75,7 +75,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .item-value{font-size:.78rem;color:#16a34a;font-weight:700;margin-top:2px}
 .item-date{font-size:.7rem;color:#a0aec0;margin-top:1px}
 
-/* ── Badge ── */
+/* ── Box image strip ── */
+.box-img-strip{display:flex;gap:6px;margin:10px 0 8px}
+.box-strip-img{width:72px;height:56px;border-radius:7px;object-fit:cover;background:#f0f2f5;flex-shrink:0}
 .badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:.62rem;font-weight:800;color:#fff;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
 
 /* ── Box detail ── */
@@ -292,13 +294,34 @@ function renderBrowse() {
     wrap.innerHTML = empty('📦', 'No storage units found.');
     return;
   }
-  wrap.innerHTML = S.boxes.map(box => {
+
+  // Build a map of box ID -> first 3 unique image URLs
+  const boxImages = {};
+  S.tools.forEach(function(item) {
+    if (!item.imageUrl) return;
+    if (!boxImages[item.storageId]) boxImages[item.storageId] = [];
+    if (boxImages[item.storageId].length < 3 &&
+        !boxImages[item.storageId].includes(item.imageUrl)) {
+      boxImages[item.storageId].push(item.imageUrl);
+    }
+  });
+
+  wrap.innerHTML = S.boxes.map(function(box) {
     const meta = [box.storageType, box.collection, box.location].filter(Boolean).join(' · ');
-    const desc = box.description ? '<div style="margin-top:2px">' + x(box.description) + '</div>' : '';
+    const desc = box.description ? '<div style="margin-top:2px;font-size:.8rem;color:#64748b">' + x(box.description) + '</div>' : '';
+    const imgs = boxImages[box.id] || [];
+    const imgStrip = imgs.length
+      ? '<div class="box-img-strip">' +
+        imgs.map(function(url) {
+          return '<img class="box-strip-img" src="' + url + '" onerror="this.style.display=\'none\'" loading="lazy">';
+        }).join('') +
+        '</div>'
+      : '';
     return '<div class="card box-card" onclick="openBox(\'' + x(box.id) + '\')">'
       + '<div class="box-card-row"><div class="box-id">' + x(box.id) + '</div><div class="box-chevron">›</div></div>'
       + (meta ? '<div class="box-meta">' + x(meta) + '</div>' : '')
       + desc
+      + imgStrip
       + '<div class="box-pill">' + box.itemCount + ' item' + (box.itemCount === 1 ? '' : 's') + '</div>'
       + '</div>';
   }).join('');
