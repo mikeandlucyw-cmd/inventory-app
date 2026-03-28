@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>API Diagnostics</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,sans-serif;background:#f0f2f5;padding:16px;padding-top:calc(env(safe-area-inset-top,0px) + 16px)}
+h1{font-size:1.1rem;font-weight:700;margin-bottom:16px;color:#1a1a2e}
+.btn{display:block;width:100%;padding:14px;border:none;border-radius:10px;font-size:.9rem;font-weight:600;cursor:pointer;margin-bottom:10px;text-align:left;background:#4f8ef7;color:#fff}
+.btn:active{opacity:.8}
+.btn.secondary{background:#e2e8f0;color:#334155}
+#log{background:#1e293b;color:#e2e8f0;border-radius:10px;padding:14px;font-family:monospace;font-size:.75rem;line-height:1.7;min-height:120px;margin-top:6px;white-space:pre-wrap;word-break:break-all}
+.ok{color:#4ade80}
+.err{color:#f87171}
+.warn{color:#fbbf24}
+.info{color:#93c5fd}
+</style>
+</head>
+<body>
+<h1>🔧 Apps Script Diagnostics</h1>
+
+<button class="btn" onclick="testGet()">1 — Test GET (data endpoint)</button>
+<button class="btn" onclick="testGetNextId()">2 — Test GET (next ID)</button>
+<button class="btn" onclick="testPostJson()">3 — Test POST (Content-Type: application/json)</button>
+<button class="btn" onclick="testPostText()">4 — Test POST (Content-Type: text/plain)</button>
+<button class="btn" onclick="testPostNoHeader()">5 — Test POST (no Content-Type)</button>
+<button class="btn" onclick="testPostFormData()">6 — Test POST (FormData)</button>
+<button class="btn" onclick="testPostXhr()">7 — Test POST (XHR, text/plain)</button>
+<button class="btn secondary" onclick="clearLog()">Clear log</button>
+
+<div id="log">Tap a test to begin…</div>
+
+<script>
+const API = 'https://script.google.com/macros/s/AKfycbwW2ZLQj5EGXARJT0d-ThtPRJLhHXj0B-ekqrqlLWIU0PPO6Ik9TfIqr1a1cmkGs8QG/exec';
+
+const log = document.getElementById('log');
+function write(msg, cls) {
+  const span = document.createElement('span');
+  span.className = cls || '';
+  span.textContent = msg + '\n';
+  log.appendChild(span);
+  log.scrollTop = log.scrollHeight;
+}
+function clearLog() { log.innerHTML = ''; }
+function ts() { return new Date().toISOString().substr(11,12); }
+
+const MIN_PAYLOAD = JSON.stringify({ action: 'createBox', storageId: 'TEST-DIAG-01', storageType: 'Box', collection: '', location: 'Study', description: 'Diagnostic test' });
+
+// ── 1. GET data
+async function testGet() {
+  write('[' + ts() + '] GET ?view=data …', 'info');
+  try {
+    const r = await fetch(API + '?view=data');
+    write('  HTTP ' + r.status + ' ' + r.statusText, r.ok ? 'ok' : 'err');
+    const text = await r.text();
+    write('  Body (' + text.length + ' chars): ' + text.substring(0, 200), 'ok');
+  } catch(e) {
+    write('  FETCH ERROR: ' + e.message, 'err');
+    write('  Type: ' + e.name, 'err');
+  }
+}
+
+// ── 2. GET nextid
+async function testGetNextId() {
+  write('[' + ts() + '] GET ?view=nextid&prefix=Box …', 'info');
+  try {
+    const r = await fetch(API + '?view=nextid&prefix=Box');
+    write('  HTTP ' + r.status, r.ok ? 'ok' : 'err');
+    const text = await r.text();
+    write('  Body: ' + text, 'ok');
+  } catch(e) {
+    write('  FETCH ERROR: ' + e.message, 'err');
+  }
+}
+
+// ── 3. POST application/json
+async function testPostJson() {
+  write('[' + ts() + '] POST Content-Type: application/json …', 'info');
+  try {
+    const r = await fetch(API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: MIN_PAYLOAD
+    });
+    write('  HTTP ' + r.status, r.ok ? 'ok' : 'err');
+    const text = await r.text();
+    write('  Body: ' + text.substring(0, 300), 'ok');
+  } catch(e) {
+    write('  FETCH ERROR: ' + e.message, 'err');
+    write('  (This is expected — preflight fails)', 'warn');
+  }
+}
+
+// ── 4. POST text/plain
+async function testPostText() {
+  write('[' + ts() + '] POST Content-Type: text/plain …', 'info');
+  try {
+    const r = await fetch(API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: MIN_PAYLOAD
+    });
+    write('  HTTP ' + r.status, r.ok ? 'ok' : 'err');
+    const text = await r.text();
+    write('  Body: ' + text.substring(0, 300), 'ok');
+  } catch(e) {
+    write('  FETCH ERROR: ' + e.message, 'err');
+  }
+}
+
+// ── 5. POST no Content-Type
+async function testPostNoHeader() {
+  write('[' + ts() + '] POST (no Content-Type header) …', 'info');
+  try {
+    const r = await fetch(API, {
+      method: 'POST',
+      body: MIN_PAYLOAD
+    });
+    write('  HTTP ' + r.status, r.ok ? 'ok' : 'err');
+    const text = await r.text();
+    write('  Body: ' + text.substring(0, 300), 'ok');
+  } catch(e) {
+    write('  FETCH ERROR: ' + e.message, 'err');
+  }
+}
+
+// ── 6. POST FormData
+async function testPostFormData() {
+  write('[' + ts() + '] POST FormData …', 'info');
+  try {
+    const fd = new FormData();
+    fd.append('payload', MIN_PAYLOAD);
+    const r = await fetch(API, { method: 'POST', body: fd });
+    write('  HTTP ' + r.status, r.ok ? 'ok' : 'err');
+    const text = await r.text();
+    write('  Body: ' + text.substring(0, 300), 'ok');
+  } catch(e) {
+    write('  FETCH ERROR: ' + e.message, 'err');
+  }
+}
+
+// ── 7. XHR text/plain (bypasses some fetch CORS handling)
+function testPostXhr() {
+  write('[' + ts() + '] XHR POST text/plain …', 'info');
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', API, true);
+  xhr.setRequestHeader('Content-Type', 'text/plain');
+  xhr.onload = function() {
+    write('  HTTP ' + xhr.status, xhr.status < 300 ? 'ok' : 'err');
+    write('  Body: ' + xhr.responseText.substring(0, 300), 'ok');
+  };
+  xhr.onerror = function() {
+    write('  XHR ERROR: network error', 'err');
+  };
+  xhr.send(MIN_PAYLOAD);
+}
+</script>
+</body>
+</html>
