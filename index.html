@@ -181,7 +181,25 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 #toast.error{background:#dc2626}
 
-/* Lightbox */
+/* Swipe delete */
+.item-wrap{position:relative;overflow:hidden;border-radius:14px;margin-bottom:10px}
+.item-wrap .card{margin-bottom:0;border-radius:14px;position:relative;z-index:1;transition:transform .2s ease;will-change:transform}
+.delete-reveal{position:absolute;right:0;top:0;bottom:0;width:80px;background:#dc2626;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px;cursor:pointer;z-index:0;border-radius:0 14px 14px 0}
+.delete-reveal span{color:#fff;font-size:.7rem;font-weight:700}
+.delete-reveal .del-icon{font-size:1.3rem}
+
+/* Delete unit button */
+.delete-unit-btn{display:flex;align-items:center;gap:8px;width:100%;padding:11px 16px;border:none;background:none;color:#dc2626;font-size:.84rem;font-weight:600;cursor:pointer;border-top:1px solid #f0f2f5;text-align:left}
+.delete-unit-btn:active{background:#fef2f2}
+
+/* Confirm sheet */
+.confirm-title{font-size:1rem;font-weight:700;color:#1a1a2e;padding:16px 18px 4px}
+.confirm-msg{font-size:.88rem;color:#64748b;padding:0 18px 16px;line-height:1.5}
+.confirm-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 18px 32px}
+.confirm-cancel{padding:14px;border:1.5px solid #e2e8f0;border-radius:12px;background:#fff;font-size:.95rem;font-weight:600;color:#475569;cursor:pointer}
+.confirm-delete{padding:14px;border:none;border-radius:12px;background:#dc2626;font-size:.95rem;font-weight:700;color:#fff;cursor:pointer}
+.confirm-cancel:active{background:#f8fafc}
+.confirm-delete:active{background:#b91c1c}
 #lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;align-items:center;justify-content:center;padding:16px}
 #lightbox.open{display:flex}
 #lb-img{max-width:100%;max-height:90vh;border-radius:10px;object-fit:contain}
@@ -363,6 +381,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 
 <!-- Toast -->
 <div id="toast"></div>
+
+<!-- Confirm delete sheet -->
+<div class="sheet-overlay" id="confirm-overlay" onclick="if(event.target===this)closeConfirm()">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="confirm-title" id="confirm-title">Delete?</div>
+    <div class="confirm-msg" id="confirm-msg">This cannot be undone.</div>
+    <div class="confirm-btns">
+      <button class="confirm-cancel" onclick="closeConfirm()">Cancel</button>
+      <button class="confirm-delete" id="confirm-ok" onclick="confirmDeleteAction()">Delete</button>
+    </div>
+  </div>
+</div>
 
 <!-- Lightbox -->
 <div id="lightbox" onclick="if(event.target===this)closeLightbox()">
@@ -620,7 +651,9 @@ function renderBoxDetail(boxId) {
   if (box.location)    rows.push('<strong>Location</strong>&ensp;' + x(box.location));
   if (box.description) rows.push('<strong>Notes</strong>&ensp;' + x(box.description));
   if (rows.length) {
-    html += '<div class="box-meta-block">' + rows.map(r => '<div>' + r + '</div>').join('') + '</div>';
+    html += '<div class="box-meta-block">' + rows.map(r => '<div>' + r + '</div>').join('')
+      + '<button class="delete-unit-btn" onclick="promptDeleteUnit(\'' + x(boxId) + '\')">🗑️&ensp;Delete this storage unit</button>'
+      + '</div>';
   }
 
   const seen = {}; const imgs = [];
@@ -650,12 +683,17 @@ function itemCard(item) {
   const meta = [item.brand, item.size, item.condition].filter(Boolean).map(x).join(' · ');
   const val  = item.estValue ? '<div class="item-value">Est. £' + Number(item.estValue).toFixed(2) + '</div>' : '';
   const date = item.lastSeen ? '<div class="item-date">' + fmtDate(item.lastSeen) + '</div>' : '';
-  return '<div class="card item-card">' + img
+  const idAttr = item.itemId ? 'data-item-id="' + x(item.itemId) + '"' : '';
+  const nameAttr = 'data-item-name="' + x(item.name) + '"';
+  const sidAttr  = 'data-storage-id="' + x(item.storageId) + '"';
+  return '<div class="item-wrap" ' + idAttr + ' ' + nameAttr + ' ' + sidAttr + '>'
+    + '<div class="delete-reveal" onclick="promptDeleteItem(this.parentNode)"><span class="del-icon">🗑️</span><span>Delete</span></div>'
+    + '<div class="card item-card">' + img
     + '<div class="item-body">'
     + '<div class="badge" style="background:' + c + '">' + x(item.category || 'Other') + '</div>'
     + '<div class="item-name">' + x(item.name) + '</div>'
     + (meta ? '<div class="item-detail">' + meta + '</div>' : '')
-    + val + date + '</div></div>';
+    + val + date + '</div></div></div>';
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1000,6 +1038,117 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 120);
   });
 });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SWIPE TO DELETE (item cards)
+// ─────────────────────────────────────────────────────────────────────────────
+var swipeState = { el: null, startX: 0, startY: 0, dx: 0, swiping: false };
+const SWIPE_THRESHOLD = 60;
+
+document.addEventListener('touchstart', function(e) {
+  var wrap = e.target.closest('.item-wrap');
+  if (!wrap) { resetSwipe(); return; }
+  swipeState.el     = wrap;
+  swipeState.startX = e.touches[0].clientX;
+  swipeState.startY = e.touches[0].clientY;
+  swipeState.dx     = 0;
+  swipeState.swiping = false;
+}, { passive: true });
+
+document.addEventListener('touchmove', function(e) {
+  if (!swipeState.el) return;
+  var dx = e.touches[0].clientX - swipeState.startX;
+  var dy = e.touches[0].clientY - swipeState.startY;
+  if (!swipeState.swiping && Math.abs(dy) > Math.abs(dx)) { swipeState.el = null; return; }
+  swipeState.swiping = true;
+  swipeState.dx = Math.min(0, Math.max(-80, dx));
+  var card = swipeState.el.querySelector('.card');
+  if (card) card.style.transform = 'translateX(' + swipeState.dx + 'px)';
+}, { passive: true });
+
+document.addEventListener('touchend', function() {
+  if (!swipeState.el) return;
+  var card = swipeState.el.querySelector('.card');
+  if (Math.abs(swipeState.dx) > SWIPE_THRESHOLD) {
+    if (card) card.style.transform = 'translateX(-80px)';
+  } else {
+    if (card) card.style.transform = '';
+  }
+  swipeState.el = null;
+});
+
+function resetSwipe() {
+  document.querySelectorAll('.item-wrap .card').forEach(function(c) { c.style.transform = ''; });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DELETE CONFIRM
+// ─────────────────────────────────────────────────────────────────────────────
+var pendingDelete = null;
+
+function promptDeleteItem(wrapEl) {
+  var itemId    = wrapEl.dataset.itemId    || '';
+  var itemName  = wrapEl.dataset.itemName  || 'this item';
+  var storageId = wrapEl.dataset.storageId || '';
+  pendingDelete = { type: 'item', itemId, itemName, storageId, el: wrapEl };
+  el('confirm-title').textContent = 'Delete item?';
+  el('confirm-msg').textContent   = '"' + itemName + '" will be permanently removed. This cannot be undone.';
+  openSheet('confirm-overlay');
+}
+
+function promptDeleteUnit(boxId) {
+  var box = S.boxes.find(function(b) { return b.id === boxId; }) || { id: boxId };
+  pendingDelete = { type: 'unit', storageId: boxId };
+  el('confirm-title').textContent = 'Delete ' + boxId + '?';
+  el('confirm-msg').textContent   = 'This will permanently delete the storage unit and all ' + (box.itemCount || 0) + ' recorded items. This cannot be undone.';
+  openSheet('confirm-overlay');
+}
+
+function closeConfirm() {
+  closeSheet('confirm-overlay');
+  pendingDelete = null;
+  resetSwipe();
+}
+
+async function confirmDeleteAction() {
+  if (!pendingDelete) return;
+  const pd  = pendingDelete;
+  const btn = el('confirm-ok');
+  btn.textContent = '…';
+  btn.disabled = true;
+
+  try {
+    if (pd.type === 'item') {
+      await postAction({ action: 'deleteItem', itemId: pd.itemId, storageId: pd.storageId, itemName: pd.itemName });
+      closeConfirm();
+      toast('✓ Item deleted');
+      await loadDataSilent();
+      if (S.box) renderBoxDetail(S.box);
+    } else {
+      await postAction({ action: 'deleteUnit', storageId: pd.storageId });
+      closeConfirm();
+      toast('✓ ' + pd.storageId + ' deleted');
+      await loadDataSilent();
+      goBack();
+    }
+  } catch(err) {
+    toast(err.message || 'Delete failed', true);
+  } finally {
+    btn.textContent = 'Delete';
+    btn.disabled = false;
+  }
+}
+
+async function postAction(payload) {
+  const res  = await fetch(API_BASE, {
+    method:  'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    body:    JSON.stringify(payload)
+  });
+  const data = await res.json();
+  if (data.error) throw new Error(data.error);
+  return data;
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // INIT
